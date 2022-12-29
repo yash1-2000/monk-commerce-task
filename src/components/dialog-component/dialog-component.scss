@@ -1,0 +1,25 @@
+.dialog-component {
+  background-color: rgba(0, 0, 0, 0.308);
+  height: 100vh;
+  width: 100%;
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  top: 0;
+  left: 0;
+  z-index: 22;
+  .dialog-container {
+    width: 75%;
+    height: 75%;
+    border-radius: 5px;
+    background-color: white;
+    display: flex;
+    flex-direction: column;
+  }
+  .dialog-content {
+    height: 100%;
+    align-self: stretch;
+    overflow-y: scroll;
+  }
+}

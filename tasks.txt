@@ -1,0 +1,8 @@
+- UI creation
+  - components creation
+  - layout creation
+  - dnd implementation
+- API integration
+  - integrate endpoint
+  - handle data
+  - integrate data with FE

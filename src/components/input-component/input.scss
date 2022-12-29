@@ -1,0 +1,28 @@
+.input-wrapper {
+    width: 100%;
+    position: relative;
+    .input {
+      width: 100%;
+      border: none;
+      padding: 10px;
+      box-shadow: 0px 2px 4px 0px #0000001a;
+      font-size: 1rem;
+      color: #00000080;
+    }
+    .text-div{
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.7rem;
+      color: #00000080;
+      background-color: white;
+      box-shadow: 0px 2px 4px 0px #0000001a;
+    }
+    .input-sharp {
+      border-radius: none;
+    }
+    .input-rounded {
+      border-radius: 20px;
+    }
+  }
+  

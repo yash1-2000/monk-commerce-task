@@ -1,0 +1,12 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+}
+body {
+  background-color: #f6f6f8;
+  font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+}
+input:focus,
+select:focus {
+  outline: none;
+}
