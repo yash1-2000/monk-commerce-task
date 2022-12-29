@@ -1,45 +1,24 @@
 import { FunctionComponent, ReactElement, useEffect, useState } from "react";
+import "./product-selector.scss";
 
 type ProductSelectorProps = {
   product: any;
   selectList: any;
 };
 
-// const initialState = {
-//   product: {
-//     id: "",
-//     title: "",
-//     varients: [
-//       { id: "", title: "" },
-//       { id: "", title: "" },
-//     ],
-//   },
-// };
-
-// enum productCheckBoxStateEnum {
-//   CHECKED = "checked",
-//   UNCHECKED = "unchecked",
-//   INDETERMINATE = "indeterminate",
-// }
-
-type varientType = {
-  id: string;
-  title: string;
-};
-
 const ProductSelector: FunctionComponent<ProductSelectorProps> = ({
   product,
   selectList,
 }): ReactElement => {
-  //   const [productCheckboxState, SetProductCheckboxState] =
-  //     useState<productCheckBoxStateEnum>(productCheckBoxStateEnum.UNCHECKED);
-  //   const [checkBoxState, SetChechBoxState] = useState<varientType[]>([]);
+  const variants = product.variants;
+  let productObj = { id: product.id, title: product.title, variants: [] };
 
-  const [checkedItems, setCheckedItems] = useState(
-    product.variants.map(() => false)
+  const [checkedItems, setCheckedItems] = useState<any>(
+    variants.map(() => false)
   );
 
   const allChecked = checkedItems.every(Boolean);
+
   const isIndeterminate = checkedItems.some(Boolean) && !allChecked;
 
   const handleAllselect = (e: any) => {
@@ -47,7 +26,7 @@ const ProductSelector: FunctionComponent<ProductSelectorProps> = ({
   };
 
   const handleIndividualselect = (e: any, id: number) => {
-    setCheckedItems([
+    setCheckedItems(() => [
       ...checkedItems.slice(0, id),
       e.target.checked,
       ...checkedItems.slice(id + 1),
@@ -55,72 +34,73 @@ const ProductSelector: FunctionComponent<ProductSelectorProps> = ({
   };
 
   useEffect(() => {
-    selectList(checkedItems, product.id);
+    console.log(checkedItems);
+    if (checkedItems.some(Boolean)) {
+      const variantsArr = variants.filter((_: any, id: number) => {
+        return checkedItems[id] === true;
+      });
+      productObj.variants = variantsArr;
+      selectList(checkedItems, productObj);
+    } else {
+      productObj.variants = [];
+      selectList(checkedItems, productObj);
+      return;
+    }
   }, [checkedItems]);
-
-  //   useEffect(() => {
-  //     console.log(checkBoxState);
-  //     if (checkBoxState.length > 0) {
-  //       SetProductCheckboxState(() => productCheckBoxStateEnum.INDETERMINATE);
-  //     } else {
-  //       SetProductCheckboxState(() => productCheckBoxStateEnum.UNCHECKED);
-  //     }
-  //   }, [checkBoxState]);
-
-  //   useEffect(() => {
-  //     console.log(checkBoxState);
-  //     if (checkBoxState.length > 0) {
-  //       SetProductCheckboxState(() => productCheckBoxStateEnum.INDETERMINATE);
-  //     } else {
-  //       SetProductCheckboxState(() => productCheckBoxStateEnum.UNCHECKED);
-  //     }
-  //   }, [checkBoxState.length]);
 
   return (
     <div>
-      <ul>
-        <li>
-          <input
-            type="checkbox"
-            name={product.title}
-            data-id={product.id}
-            checked={allChecked}
-            // checked={productCheckboxState === productCheckBoxStateEnum.CHECKED}
-            ref={(input) => {
-              if (input) {
-                // input.indeterminate =
-                //   productCheckboxState ===
-                //   productCheckBoxStateEnum.INDETERMINATE;
-                input.indeterminate = isIndeterminate;
-              }
-            }}
-            // onChange={(e) => handleAllselect(e)}
-            onChange={(e) => handleAllselect(e)}
-            id="option"
-          />
-          <label>{product.title}</label>
+      <div>
+        <div>
+          <div className="option-container">
+            <label className="check-box-container">
+              <input
+                type="checkbox"
+                className="chackbox_input"
+                name={product.title}
+                data-id={product.id}
+                checked={allChecked}
+                ref={(input) => {
+                  if (input) {
+                    input.indeterminate = isIndeterminate;
+                  }
+                }}
+                onChange={(e) => handleAllselect(e)}
+                id="option"
+              />
+              <span className="check-box"></span>
+            </label>
+
+            <div>
+              <img style={{ width: "50px",background:'gray' }} src={product.image.src} alt="" />
+            </div>
+
+            <p>{product.title}</p>
+          </div>
+
           {
-            <ul>
+            <div>
               {product.variants.map((varient: any, id: number) => (
-                <li key={id}>
-                  <label>
+                <div key={id} className="sub-option-container">
+                  <label className="check-box-container">
                     <input
                       type="checkbox"
                       className="subOption"
-                      //   onChange={(e) => handleIndividualselect(e)}
                       checked={checkedItems[id]}
                       onChange={(e: any) => handleIndividualselect(e, id)}
                       name={varient.title}
                       data-id={varient.id}
-                    />{" "}
-                    {varient.title}
+                    />
+                    <span className="check-box"></span>
                   </label>
-                </li>
+
+                  <p>{varient.title}</p>
+                </div>
               ))}
-            </ul>
+            </div>
           }
-        </li>
-      </ul>
+        </div>
+      </div>
     </div>
   );
 };

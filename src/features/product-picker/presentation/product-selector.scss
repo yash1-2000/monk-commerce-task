@@ -1,0 +1,98 @@
+.option-container {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.5rem 1rem;
+  border-top: 1px solid rgba(128, 128, 128, 0.288);
+}
+.sub-option-container {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem 1rem 1rem 3.3rem;
+  border-top: 1px solid rgba(128, 128, 128, 0.288);
+}
+.check-box-container {
+  display: block;
+  position: relative;
+  padding-left: 1.5rem;
+  margin-bottom: 1.5rem;
+  cursor: pointer;
+  font-size: 20px;
+}
+/* Hide the default checkbox */
+input[type="checkbox"] {
+  //   visibility: hidden;
+  display: none;
+}
+
+/* Creating a custom checkbox
+        based on demand */
+.check-box {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 25px;
+  width: 25px;
+  border-radius: 5px;
+  background-color: rgb(255, 255, 255);
+  border: 1px solid black;
+  color: white;
+}
+
+/* Specify the background color to be
+        shown when checkbox is checked */
+.check-box-container input:checked ~ .check-box,
+.check-box2 {
+  background-color: #008060;
+  border: none;
+}
+.check-box-container input:indeterminate ~ .check-box {
+  background-color: #008060;
+  border: none;
+}
+
+/* Checkmark to be shown in checkbox */
+/* It is not be shown when not checked */
+.check-box:after {
+  content: "";
+  position: absolute;
+  display: none;
+}
+.check-box::before {
+  content: "";
+  position: absolute;
+  display: none;
+}
+/* Display checkmark when checked */
+.check-box-container input:checked ~ .check-box:after {
+  display: block;
+}
+.check-box-container input:indeterminate ~ .check-box:before {
+  display: block;
+}
+
+/* Styling the checkmark using webkit */
+/* Rotated the rectangle by 45 degree and 
+        showing only two border to make it look
+        like a tickmark */
+.check-box-container .check-box:after {
+  left: 36%;
+  top: 14%;
+  width: 6px;
+  height: 12px;
+  border: solid white;
+  border-width: 0 2px 2px 0;
+  -webkit-transform: rotate(45deg);
+  -ms-transform: rotate(45deg);
+  transform: rotate(45deg);
+}
+
+.check-box-container .check-box:before {
+  left: 50%;
+  transform: translate(-50%, 0);
+  top: 50%;
+  width: 50%;
+  height: 2px;
+  background-color: rgb(255, 255, 255);
+}
