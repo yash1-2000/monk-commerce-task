@@ -1,0 +1,20 @@
+.search-input-wrapper {
+  width: 100%;
+  background-color: white;
+  border: 1px solid rgba(128, 128, 128, 0.466);
+  padding: 0.5rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  i {
+    color: rgba(85, 85, 85, 0.63);
+  }
+  .search-input {
+    border: none;
+    width: 100%;
+    height: 100%;
+    align-self: stretch;
+    font-size: 1rem;
+    color: rgba(85, 85, 85, 0.63);
+  }
+}

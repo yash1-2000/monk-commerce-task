@@ -34,7 +34,6 @@ const ProductSelector: FunctionComponent<ProductSelectorProps> = ({
   };
 
   useEffect(() => {
-    console.log(checkedItems);
     if (checkedItems.some(Boolean)) {
       const variantsArr = variants.filter((_: any, id: number) => {
         return checkedItems[id] === true;
@@ -72,10 +71,14 @@ const ProductSelector: FunctionComponent<ProductSelectorProps> = ({
             </label>
 
             <div>
-              <img style={{ width: "50px",background:'gray' }} src={product.image.src} alt="" />
+              <img
+                style={{ width: "50px", background: "gray" }}
+                src={product.image.src}
+                alt=""
+              />
             </div>
 
-            <p>{product.title}</p>
+            <p style={{ margin: "0" }}>{product.title}</p>
           </div>
 
           {
@@ -94,7 +97,26 @@ const ProductSelector: FunctionComponent<ProductSelectorProps> = ({
                     <span className="check-box"></span>
                   </label>
 
-                  <p>{varient.title}</p>
+                  <p style={{ margin: "0" }}>{varient.title}</p>
+
+                  <div
+                    style={{
+                      display: "flex",
+                      justifyContent: "end",
+                      alignItems: "center",
+                      gap: "0.5rem",
+                      width: "60%",
+                      marginRight: "0.5rem",
+                      marginLeft: "auto",
+                    }}
+                  >
+                    <p style={{ margin: "0" }}>
+                      {varient.inventory_quantity
+                        ? `${varient.inventory_quantity} available`
+                        : ""}
+                    </p>
+                    <p style={{ margin: "0" }}>${varient.price}</p>
+                  </div>
                 </div>
               ))}
             </div>

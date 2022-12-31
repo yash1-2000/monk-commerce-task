@@ -6,3 +6,6 @@
   - integrate endpoint
   - handle data
   - integrate data with FE
+
+  ~ Doubts
+  - If user removes all varients of product, do we hae to remove the product also?

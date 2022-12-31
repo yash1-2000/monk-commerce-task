@@ -1,5 +1,4 @@
 import { FunctionComponent, ReactElement } from "react";
-import ButtonComponent from "../../button-component";
 import "./dialog-sub-components.scss";
 
 type DialogBottomComponentProps = {
@@ -16,7 +15,9 @@ const DialogBottomComponent: FunctionComponent<DialogBottomComponentProps> = ({
       <div className="dialog-bottom-container">
         <div>{DialogBottomText}</div>
         <div className="dialog-close-icon">
-          {actionButtons.map((element) => element)}
+          {actionButtons.map((element, key) => (
+            <span key={key}>{element}</span>
+          ))}
         </div>
       </div>
     </div>

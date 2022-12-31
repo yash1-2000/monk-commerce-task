@@ -1,20 +1,21 @@
 import { FunctionComponent, ReactElement, ReactNode } from "react";
 
-type ButtonVarient = "filled" | "outelined";
+type Buttonvariant = "filled" | "outelined";
 
 type textDisplayComponentProps = {
   height?: string;
   width?: string;
-  varient?: ButtonVarient;
+  variant?: Buttonvariant;
   fillColour?: string;
+  onClick?: (e: any) => void;
   children: ReactNode;
 };
 
-const getVarientClass = (
+const getvariantClass = (
   fillColour: string,
-  varient?: ButtonVarient
+  variant?: Buttonvariant
 ): Partial<CSSStyleDeclaration> => {
-  if (!varient || varient === "filled") {
+  if (!variant || variant === "filled") {
     return {
       backgroundColor: fillColour,
       color: "white",
@@ -22,7 +23,7 @@ const getVarientClass = (
     };
   } else {
     return {
-      border: `1px solid ${fillColour}`,
+      border: `2px solid ${fillColour}`,
       color: fillColour,
       background: "none",
     };
@@ -33,9 +34,9 @@ const getButtonStyles = (
   height?: string,
   width?: string,
   fillColour?: string,
-  varient?: ButtonVarient
+  variant?: Buttonvariant
 ): any => {
-  const getStyleByVarient = getVarientClass(fillColour ?? "grey", varient);
+  const getStyleByvariant = getvariantClass(fillColour ?? "grey", variant);
   return {
     height: `${height ?? "100%"}`,
     width: `${width ?? "100%"}`,
@@ -45,21 +46,27 @@ const getButtonStyles = (
     borderRadius: "5px",
     cursor: "pointer",
     fontSize: "1rem",
+    fontWeight:'600',
     padding: "0 1rem",
     marginLeft: "10px",
-    ...getStyleByVarient,
+    ...getStyleByvariant,
   };
 };
 
 const ButtonComponent: FunctionComponent<textDisplayComponentProps> = ({
   height,
   width,
-  varient,
+  variant,
   fillColour,
   children,
+  onClick,
 }): ReactElement => {
-  const styleObj = getButtonStyles(height, width, fillColour, varient);
-  return <button style={styleObj}>{children}</button>;
+  const styleObj = getButtonStyles(height, width, fillColour, variant);
+  return (
+    <button onClick={onClick} style={styleObj}>
+      {children}
+    </button>
+  );
 };
 
 export default ButtonComponent;

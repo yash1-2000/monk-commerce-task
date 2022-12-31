@@ -1,13 +1,15 @@
-import './App.css'
-import AddProductsView from './views/add-products'
+import "./App.css";
+import { ProductDataProvider } from "./features/product-display/services/product-context";
+import AddProductsView from "./views/add-products";
 
 function App() {
-
   return (
     <div className="App">
-     <AddProductsView/>
+      <ProductDataProvider>
+        <AddProductsView />
+      </ProductDataProvider>
     </div>
-  )
+  );
 }
 
-export default App
+export default App;

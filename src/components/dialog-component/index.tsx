@@ -7,16 +7,18 @@ import DialogHeaderComponent from "./sub-components/dialog-header";
 type DialogComponentProps = {
   children: ReactElement;
   bottomActionButtons: ReactElement[];
+  onClose: () => void;
 };
 
 const DialogComponent: FunctionComponent<DialogComponentProps> = ({
   children,
   bottomActionButtons,
+  onClose,
 }) => {
   return (
     <div className="dialog-component">
       <div className="dialog-container">
-        <DialogHeaderComponent />
+        <DialogHeaderComponent onClose={onClose} />
         <div className="dialog-content">{children}</div>
         <DialogBottomComponent
           actionButtons={bottomActionButtons}

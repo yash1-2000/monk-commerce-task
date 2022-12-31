@@ -1,0 +1,31 @@
+.variant-display-form-conteinar {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  // .variant-drag-icon {
+  //   width: 5%;
+  // }
+  .variant-name-area {
+    width: 63%;
+  }
+  .variant-discount-area {
+    width: 35%;
+    margin-right: 10px;
+    .variant-discount-form-area {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      .variant-discount-form-amount-area {
+        width: 50%;
+      }
+      .variant-discount-form-offer-dropdown {
+        width: 50%;
+      }
+    }
+    margin-left: 0.5rem;
+  }
+  .variant-removeIcon {
+    width: 2%;
+    cursor: pointer;
+  }
+}

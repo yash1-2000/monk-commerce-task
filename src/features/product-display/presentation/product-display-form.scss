@@ -1,0 +1,34 @@
+.product-display-form-conteinar {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  .product-drag-icon {
+    width: 5%;
+  }
+  .product-serial-no {
+    width: 5%;
+  }
+  .product-name-area {
+    width: 58%;
+  }
+  .product-discount-area {
+    width: 35%;
+    .product-discount-form-area {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      .product-discount-form-amount-area {
+        width: 50%;
+      }
+      .product-discount-form-offer-dropdown {
+        width: 50%;
+      }
+    }
+    margin-left: 0.5rem;
+  }
+  .product-removeIcon {
+    width: 2%;
+    margin-left: 10px;
+    cursor: pointer;
+  }
+}

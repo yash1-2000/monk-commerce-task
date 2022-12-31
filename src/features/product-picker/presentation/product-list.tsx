@@ -1,49 +1,104 @@
-import { FunctionComponent, ReactElement, useEffect, useState } from "react";
+import {
+  FunctionComponent,
+  ReactElement,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import { dummyProducts } from "../../../dummy-products";
 import ProductSelector from "./product-selector";
-import './product-list.scss'
+import "./product-list.scss";
+import SearchComponent from "../../../components/search-component";
+import { getProducts } from "../../../api/products-service/product-service-api";
+import useDebounce from "../../../hooks/use-debaunce-hook";
 
-const ProductList: FunctionComponent = (): ReactElement => {
+type ProductListProps = {
+  SetProductDataList: any;
+  addData: (data: any) => void;
+  removeData: (id: string) => void;
+};
+
+const ProductList: FunctionComponent<ProductListProps> = ({
+  SetProductDataList,
+  addData,
+  removeData,
+}): ReactElement => {
   const [allProductList, SetAllProductList] = useState<any>([]);
+  const [searchString, setSearchString] = useState("");
+  const [searchStringTrack, setSearchStringTrack] = useState("");
+  const debauncedSearch = useDebounce(searchString, 1000);
+  const [pageNumber, setPageNumber] = useState(0);
+  const observer = useRef<IntersectionObserver | null>(null);
   useEffect(() => {
-    fetch(
-      "https://stageapibc.monkcommerce.app/admin/shop/product?search=&page=0"
-    )
-      .then((response) => response.json())
-      .then((data) => {
-        if (data !== null) {
-          SetAllProductList(data);
-        }
-      });
-  }, []);
+    // if (searchString === "") return;
+    if (searchStringTrack !== debauncedSearch) {
+      setSearchStringTrack(debauncedSearch);
+      getProducts(debauncedSearch, 0).then((data) =>
+        SetAllProductList(() => [...data])
+      );
+      setPageNumber(0);
+    } else {
+      getProducts(debauncedSearch, pageNumber).then((data) =>
+        SetAllProductList((prev: any) => [...prev, ...data])
+      );
+    }
+
+    return () => SetProductDataList([]);
+  }, [pageNumber, debauncedSearch]);
+
   const selectList = (list: boolean[], product: any) => {
-    console.log(list, product);
-    // if (list.some(Boolean)) {
-    //   console.log("some are selected");
-    //   const selectedProduct = dummyProducts.find(
-    //     (product) => product.id === productId
-    //   );
-    //   SetAllProductList((prev: any) => [...prev, selectedProduct]);
-    // } else {
-    //   console.log("no varient selected hens do not addproduct");
-    //   const pIndex = allProductList.findIndex(
-    //     (product: any) => product.id === productId
-    //   );
-    //   const newA = [...allProductList];
-    //   newA.splice(pIndex, 1);
-    //   console.log(pIndex, newA);
-    //   SetAllProductList(() => [...newA]);
-    // }
+    if (list.every((element) => element === false)) {
+      removeData(product.id);
+    } else {
+      addData(product);
+    }
   };
 
+  const lastProductElementRef = useCallback((node: any) => {
+    if (observer.current) observer.current.disconnect();
+    observer.current = new IntersectionObserver((entries) => {
+      if (entries[0].isIntersecting) {
+        console.log("intersecting");
+        setPageNumber((prevPageNumber) => prevPageNumber + 1);
+      }
+    });
+    if (node) observer.current.observe(node);
+  }, []);
+
   useEffect(() => {
-    console.log(allProductList);
-  }, [allProductList]);
+    console.log("debaunce", debauncedSearch);
+  }, [debauncedSearch]);
+
+  useEffect(() => {
+    console.log("normal", searchString);
+  }, [searchString]);
+
   return (
     <div>
-      {allProductList.map((product: any, id: any) => (
-        <ProductSelector selectList={selectList} product={product} key={id} />
-      ))}
+      <div className="search-container">
+        <SearchComponent onChange={setSearchString} />
+      </div>
+      <div>
+        {allProductList.map((product: any, id: any) =>
+          //  <ProductSelector selectList={selectList} product={product} key={id} />
+          allProductList.length === id + 1 ? (
+            <div ref={lastProductElementRef} key={id}>
+              <ProductSelector
+                selectList={selectList}
+                product={product}
+                key={id}
+              />
+            </div>
+          ) : (
+            <ProductSelector
+              selectList={selectList}
+              product={product}
+              key={id}
+            />
+          )
+        )}
+      </div>
     </div>
   );
 };

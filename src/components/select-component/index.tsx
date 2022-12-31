@@ -1,15 +1,19 @@
 import { FunctionComponent, useEffect, useState } from "react";
+import { useEffectAfterInitialRender } from "../../hooks/custom-effect";
 import { DownArrowIcon } from "../custom-icons";
 import "./select-component.scss";
 
 type TextInputComponentVarient = "sharp" | "rounded";
 
 type textDisplayComponentProps = {
-  varient?: TextInputComponentVarient;
+  variant?: TextInputComponentVarient;
+  onChange?: (e: any) => void;
+  fieldName?: string;
+  value?: string;
 };
 
-const getVarientClass = (varient?: TextInputComponentVarient): string => {
-  if (!varient || varient === "sharp") {
+const getVarientClass = (variant?: TextInputComponentVarient): string => {
+  if (!variant || variant === "sharp") {
     return "select-sharp";
   } else {
     return "select-rounded";
@@ -19,32 +23,40 @@ const getVarientClass = (varient?: TextInputComponentVarient): string => {
 const Items = ["flat", "%off"];
 
 const SelectInputComponent: FunctionComponent<textDisplayComponentProps> = ({
-  varient,
+  variant,
+  onChange,
+  fieldName,
+  value,
 }) => {
   const [showItems, SetShowItems] = useState(false);
-  const [selectedItems, SetSelectedItems] = useState(Items[0]);
+  const [selectedItems, SetSelectedItems] = useState(value);
 
   const dropDown = () => {
     SetShowItems((prevState) => !prevState);
   };
 
   const selectItem = (item: string) => {
-    console.log(item);
     SetSelectedItems(() => item);
     SetShowItems(false);
-    console.log(selectedItems);
   };
 
-  useEffect(() => {
-    console.log("effect", selectedItems);
+  useEffectAfterInitialRender(() => {
+    if (onChange) {
+      onChange({
+        target: {
+          name: fieldName,
+          value: selectedItems,
+        },
+      });
+    }
   }, [selectedItems]);
 
   return (
     <div>
       <div className="select-box--box">
-        <div className={`select-box--container ${getVarientClass(varient)}`}>
+        <div className={`select-box--container ${getVarientClass(variant)}`}>
           <div className="select-box-container">
-            <div className="select-box--selected-item">{selectedItems}</div>
+            <div className="select-box--selected-item">{value}</div>
             <div className="drop-arrow" onClick={dropDown}>
               <DownArrowIcon fill="#00000066" height="16" width="16" />
             </div>
