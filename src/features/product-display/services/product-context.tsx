@@ -9,10 +9,7 @@ import { productInterface } from "../../../models/product/product-model";
 
 type UserAccountContextProps = {
   productData: any;
-  addProductData: (
-    productIndexToUpdate: number | undefined,
-    dataList: []
-  ) => void;
+  addProductData: (productIndexToUpdate: number, dataList: []) => void;
   addEmptyProductData: () => void;
   modifyProductData: () => void;
   reArrangeProductData: (id1: number, id2?: number) => void;
@@ -25,6 +22,8 @@ type UserAccountContextProps = {
   removeVariant: (productIndex: number, variantIndex: number) => void;
   areProductsRemovable: boolean;
   updateProductData: (id: number, data: productInterface) => void;
+  updateOptionTrack: (val: any) => void;
+  optionTrack: any;
 };
 
 const ProductDataContext = createContext<UserAccountContextProps>({
@@ -38,6 +37,8 @@ const ProductDataContext = createContext<UserAccountContextProps>({
   removeVariant: () => {},
   areProductsRemovable: false,
   updateProductData: () => {},
+  updateOptionTrack: () => {},
+  optionTrack: [],
 });
 
 export const ProductDataProvider: FunctionComponent<{ children: any }> = ({
@@ -45,6 +46,7 @@ export const ProductDataProvider: FunctionComponent<{ children: any }> = ({
 }) => {
   const [productData, SetProductData] = useState<any>([{}]);
   const [areProductsRemovable, SetAreProductsRemovable] = useState<any>(false);
+  const [optionTrack, SetOptionTrack] = useState<any>([]);
 
   useEffect(() => {
     console.log(productData);
@@ -58,18 +60,17 @@ export const ProductDataProvider: FunctionComponent<{ children: any }> = ({
     }
   }, [productData]);
 
+  const updateOptionTrack = (title: any) => {
+    SetOptionTrack((prev: any) => [...prev, title]);
+  };
+
   const addEmptyProductData = () => {
     SetProductData((prev: any) => [...prev, {}]);
   };
 
-  const addProductData = (
-    productIndexToUpdate: number | undefined,
-    dataList: []
-  ) => {
-    // if (productIndexToUpdate === undefined) return;
+  const addProductData = (productIndexToUpdate: number, dataList: []) => {
     const productDataCopy = [...productData];
-    // productDataCopy.splice(productIndexToUpdate, 1, ...dataList);
-    productDataCopy.splice(0, 1, ...dataList);
+    productDataCopy.splice(productIndexToUpdate, 1, ...dataList);
     SetProductData(() => [...productDataCopy]);
   };
 
@@ -93,7 +94,7 @@ export const ProductDataProvider: FunctionComponent<{ children: any }> = ({
     id1: number,
     id2?: number
   ) => {
-    if (!id2 || id1 === id2) {
+    if (id2 === undefined || id1 === id2) {
       return;
     }
     const productDataCopy = [...productData];
@@ -106,8 +107,11 @@ export const ProductDataProvider: FunctionComponent<{ children: any }> = ({
 
   const removeProduct = (productIndex: number) => {
     const productDataCopy = [...productData];
+    const pData = productDataCopy[productIndex];
     productDataCopy.splice(productIndex, 1);
     SetProductData(() => [...productDataCopy]);
+    const pIdx = optionTrack.indexOf(pData.id);
+    SetOptionTrack((prev: any) => prev.splice(pIdx, 1));
   };
 
   const removeVariant = (productIndex: number, variantIndex: number) => {
@@ -136,6 +140,8 @@ export const ProductDataProvider: FunctionComponent<{ children: any }> = ({
         removeVariant,
         areProductsRemovable,
         updateProductData,
+        updateOptionTrack,
+        optionTrack,
       }}
     >
       {children}

@@ -1,4 +1,4 @@
-import { FunctionComponent, useEffect, useState } from "react";
+import { FunctionComponent, memo, useEffect, useRef, useState } from "react";
 import ButtonComponent from "../../../components/button-component";
 import { CloseIcon, OpenInFullIcon } from "../../../components/custom-icons";
 import TextInputComponent from "../../../components/input-component";
@@ -22,15 +22,19 @@ const ProductDisplayForm: FunctionComponent<ProductDataDisplayFormProps> = ({
   selectProducts,
   updateProductDataState,
 }) => {
-  const { removeProduct, areProductsRemovable } = useProductData();
-
-  const [showDiscountOption, SetShowDiscountOption] = useState(false);
+  const {
+    removeProduct,
+    areProductsRemovable,
+    updateOptionTrack,
+    optionTrack,
+  } = useProductData();
 
   const showDiscountOptionFun = () => {
+    console.log("function rening", productData.title);
     if (isEmpty) {
       return;
     } else {
-      SetShowDiscountOption(true);
+      return updateOptionTrack(productData.id.toString());
     }
   };
 
@@ -69,7 +73,7 @@ const ProductDisplayForm: FunctionComponent<ProductDataDisplayFormProps> = ({
           />
         </div>
         <div className="product-discount-area">
-          {isEmpty || !showDiscountOption ? (
+          {isEmpty || !optionTrack.includes(productData.id.toString()) ? (
             <div className="product-discount-form-area">
               <ButtonComponent
                 fillColour="#008060"
@@ -115,4 +119,4 @@ const ProductDisplayForm: FunctionComponent<ProductDataDisplayFormProps> = ({
   );
 };
 
-export default ProductDisplayForm;
+export default memo(ProductDisplayForm);

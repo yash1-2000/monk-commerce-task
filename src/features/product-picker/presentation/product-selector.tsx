@@ -99,17 +99,7 @@ const ProductSelector: FunctionComponent<ProductSelectorProps> = ({
 
                   <p style={{ margin: "0" }}>{varient.title}</p>
 
-                  <div
-                    style={{
-                      display: "flex",
-                      justifyContent: "end",
-                      alignItems: "center",
-                      gap: "0.5rem",
-                      width: "60%",
-                      marginRight: "0.5rem",
-                      marginLeft: "auto",
-                    }}
-                  >
+                  <div className="variant-row">
                     <p style={{ margin: "0" }}>
                       {varient.inventory_quantity
                         ? `${varient.inventory_quantity} available`

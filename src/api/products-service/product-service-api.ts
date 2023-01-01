@@ -8,9 +8,6 @@ export const getProducts = async (
       `https://stageapibc.monkcommerce.app/admin/shop/product?search=${searchParam}&page=${pageNo}`
     );
     result = await response.json();
-    if (result === null) {
-      return [];
-    }
     return result;
   } catch (error) {
     console.log(error);

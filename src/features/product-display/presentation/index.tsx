@@ -11,8 +11,8 @@ const ProductDisplay = () => {
   const [productDialogOpen, SetProductDialogOpen] = useState<Boolean>(false);
   const [productDataList, SetProductDataList] = useState<any>([]);
   const [productIndexToUpdate, SetProductIndexToUpdate] = useState<
-    number | undefined
-  >(undefined);
+    number
+  >(0);
 
   const { addProductData, addEmptyProductData } = useProductData();
 
@@ -67,6 +67,7 @@ const ProductDisplay = () => {
       </div>
       {productDialogOpen && (
         <DialogComponent
+          bottomText={`${productDataList.length} products selected`}
           bottomActionButtons={[
             <ButtonComponent
               fillColour="#00000099"
@@ -85,7 +86,7 @@ const ProductDisplay = () => {
               onClick={() => {
                 addProductData(productIndexToUpdate, productDataList);
                 SetProductDialogOpen(false);
-                SetProductIndexToUpdate(undefined);
+                SetProductIndexToUpdate(0);
               }}
             >
               Add

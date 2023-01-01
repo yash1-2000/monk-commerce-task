@@ -1,4 +1,4 @@
-import { FunctionComponent, ReactElement } from "react";
+import { FunctionComponent, memo, ReactElement } from "react";
 import ProductDisplayForm from "../presentation/product-display-form";
 import VariantDisplay from "../presentation/variant-display";
 import { useProductData } from "../services/product-context";
@@ -47,4 +47,4 @@ const ProductFormsComponent: FunctionComponent<ProductFormsComponentProps> = ({
   );
 };
 
-export default ProductFormsComponent;
+export default memo(ProductFormsComponent);

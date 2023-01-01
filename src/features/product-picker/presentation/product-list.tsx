@@ -6,12 +6,12 @@ import {
   useRef,
   useState,
 } from "react";
-import { dummyProducts } from "../../../dummy-products";
 import ProductSelector from "./product-selector";
 import "./product-list.scss";
 import SearchComponent from "../../../components/search-component";
 import { getProducts } from "../../../api/products-service/product-service-api";
 import useDebounce from "../../../hooks/use-debaunce-hook";
+import { ClipLoader } from "react-spinners";
 
 type ProductListProps = {
   SetProductDataList: any;
@@ -27,6 +27,7 @@ const ProductList: FunctionComponent<ProductListProps> = ({
   const [allProductList, SetAllProductList] = useState<any>([]);
   const [searchString, setSearchString] = useState("");
   const [searchStringTrack, setSearchStringTrack] = useState("");
+  const [noData, setNodata] = useState(false);
   const debauncedSearch = useDebounce(searchString, 1000);
   const [pageNumber, setPageNumber] = useState(0);
   const observer = useRef<IntersectionObserver | null>(null);
@@ -34,14 +35,16 @@ const ProductList: FunctionComponent<ProductListProps> = ({
     // if (searchString === "") return;
     if (searchStringTrack !== debauncedSearch) {
       setSearchStringTrack(debauncedSearch);
-      getProducts(debauncedSearch, 0).then((data) =>
-        SetAllProductList(() => [...data])
-      );
+      getProducts(debauncedSearch, 0).then((data) => {
+        if (data === null) return setNodata(true);
+        return SetAllProductList(() => [...data]);
+      });
       setPageNumber(0);
     } else {
-      getProducts(debauncedSearch, pageNumber).then((data) =>
-        SetAllProductList((prev: any) => [...prev, ...data])
-      );
+      getProducts(debauncedSearch, pageNumber).then((data) => {
+        if (data === null) return setNodata(true);
+        return SetAllProductList((prev: any) => [...prev, ...data]);
+      });
     }
 
     return () => SetProductDataList([]);
@@ -66,37 +69,36 @@ const ProductList: FunctionComponent<ProductListProps> = ({
     if (node) observer.current.observe(node);
   }, []);
 
-  useEffect(() => {
-    console.log("debaunce", debauncedSearch);
-  }, [debauncedSearch]);
-
-  useEffect(() => {
-    console.log("normal", searchString);
-  }, [searchString]);
-
   return (
     <div>
       <div className="search-container">
         <SearchComponent onChange={setSearchString} />
       </div>
       <div>
-        {allProductList.map((product: any, id: any) =>
-          //  <ProductSelector selectList={selectList} product={product} key={id} />
-          allProductList.length === id + 1 ? (
-            <div ref={lastProductElementRef} key={id}>
-              <ProductSelector
-                selectList={selectList}
-                product={product}
-                key={id}
-              />
-            </div>
-          ) : (
-            <ProductSelector
-              selectList={selectList}
-              product={product}
-              key={id}
-            />
-          )
+        {allProductList.length === 0 ? (
+          <div className="loader-container">
+            <ClipLoader color="#008060" />
+          </div>
+        ) : (
+          <div>
+            {allProductList.map((product: any, id: any) =>
+              allProductList.length === id + 1 ? (
+                <div ref={lastProductElementRef} key={id}>
+                  <ProductSelector
+                    selectList={selectList}
+                    product={product}
+                    key={id}
+                  />
+                </div>
+              ) : (
+                <ProductSelector
+                  selectList={selectList}
+                  product={product}
+                  key={id}
+                />
+              )
+            )}
+          </div>
         )}
       </div>
     </div>

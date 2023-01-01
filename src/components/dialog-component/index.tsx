@@ -8,12 +8,14 @@ type DialogComponentProps = {
   children: ReactElement;
   bottomActionButtons: ReactElement[];
   onClose: () => void;
+  bottomText: string;
 };
 
 const DialogComponent: FunctionComponent<DialogComponentProps> = ({
   children,
   bottomActionButtons,
   onClose,
+  bottomText,
 }) => {
   return (
     <div className="dialog-component">
@@ -22,7 +24,7 @@ const DialogComponent: FunctionComponent<DialogComponentProps> = ({
         <div className="dialog-content">{children}</div>
         <DialogBottomComponent
           actionButtons={bottomActionButtons}
-          DialogBottomText="1 product selected"
+          DialogBottomText={bottomText}
         />
       </div>
     </div>

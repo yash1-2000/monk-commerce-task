@@ -96,3 +96,12 @@ input[type="checkbox"] {
   height: 2px;
   background-color: rgb(255, 255, 255);
 }
+.variant-row {
+  display: flex;
+  justify-content: end;
+  align-items: center;
+  gap: 2rem;
+  width: 60%;
+  margin-right: 0.5rem;
+  margin-left: auto;
+}
