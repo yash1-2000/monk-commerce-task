@@ -1,5 +1,19 @@
 .main_content {
-    display: flex;
-    justify-content: center;
-    padding: 30px;
-   }
+  display: flex;
+  justify-content: center;
+  padding: 30px;
+}
+.product-display-header-container {
+  display: flex;
+  justify-content: space-between;
+  font-size: large;
+  font-weight: bold;
+  margin: 1rem 0;
+  .product-header {
+    width: 65%;
+    padding-left: 6rem;
+  }
+  .discount-header {
+    width: 35%;
+  }
+}

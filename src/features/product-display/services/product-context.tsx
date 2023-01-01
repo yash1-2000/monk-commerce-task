@@ -72,14 +72,28 @@ export const ProductDataProvider: FunctionComponent<{ children: any }> = ({
     const productDataCopy = [...productData];
     productDataCopy.splice(productIndexToUpdate, 1, ...dataList);
     SetProductData(() => [...productDataCopy]);
+
+    // const productDataCopy = [...productData];
+    // const currentProductId = [...productDataCopy][productIndexToUpdate].id;
+    // const mappedProductDataCopy = dataList.map((data: any) => data.id);
+    // const filteredProductDataCopy = mappedProductDataCopy.filter(
+    //   (data: any) =>
+    //     currentProductId === data.id || !mappedProductDataCopy.includes(data.id)
+    // );
+    // const newIdx = filteredProductDataCopy.findIndex(
+    //   (data: any) => data.id === currentProductId
+    // );
+
+    productDataCopy.splice(productIndexToUpdate, 1, ...dataList);
+    // filteredProductDataCopy.splice(newIdx, 1, ...dataList);
+    SetProductData(() => [...productDataCopy]);
+    // SetProductData(() => [...filteredProductDataCopy]);
   };
 
-  const modifyProductData = () => {
-    SetProductData(["modifieData"]);
-  };
+  const modifyProductData = () => {};
 
   const reArrangeProductData = (id1: number, id2?: number) => {
-    if (!id2 || id1 === id2) {
+    if (id2 === undefined || id1 === id2) {
       return;
     }
 

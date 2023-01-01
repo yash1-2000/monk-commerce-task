@@ -1,9 +1,10 @@
 import { FunctionComponent, memo, useEffect, useRef, useState } from "react";
 import ButtonComponent from "../../../components/button-component";
-import { CloseIcon, OpenInFullIcon } from "../../../components/custom-icons";
+import { CloseIcon } from "../../../components/custom-icons";
 import TextInputComponent from "../../../components/input-component";
 import SelectInputComponent from "../../../components/select-component";
 import TextSelectComponent from "../../../components/text-select-component";
+import { discountTypeEnum } from "../../../models/product/product-model";
 import { useProductData } from "../services/product-context";
 import "./product-display-form.scss";
 
@@ -54,7 +55,7 @@ const ProductDisplayForm: FunctionComponent<ProductDataDisplayFormProps> = ({
       case "type":
         updateProductDataState("productForm", {
           ...productData,
-          discountType: parseInt(fieValue) as number,
+          discountType: fieValue as discountTypeEnum,
         });
         break;
       default:
