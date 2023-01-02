@@ -30,25 +30,64 @@ const ProductList: FunctionComponent<ProductListProps> = ({
   const [noData, setNodata] = useState(false);
   const debauncedSearch = useDebounce(searchString, 1000);
   const [pageNumber, setPageNumber] = useState(0);
-  const observer = useRef<IntersectionObserver | null>(null);
+
   useEffect(() => {
-    // if (searchString === "") return;
     if (searchStringTrack !== debauncedSearch) {
+      console.log("fetching initially", pageNumber);
       setSearchStringTrack(debauncedSearch);
       getProducts(debauncedSearch, 0).then((data) => {
-        if (data === null) return setNodata(true);
-        return SetAllProductList(() => [...data]);
+        if (data === null) {
+          return setNodata(true);
+        } else {
+          setNodata(false);
+          return SetAllProductList(() => [...data]);
+        }
       });
       setPageNumber(0);
     } else {
+      // if (allProductList.length < 10) return;
+      console.log("fetching again", pageNumber);
       getProducts(debauncedSearch, pageNumber).then((data) => {
-        if (data === null) return setNodata(true);
-        return SetAllProductList((prev: any) => [...prev, ...data]);
+        if (data === null) {
+          return setNodata(true);
+        } else {
+          setNodata(false);
+          return SetAllProductList((prev: any) => [...prev, ...data]);
+        }
       });
     }
 
     return () => SetProductDataList([]);
-  }, [pageNumber, debauncedSearch]);
+  }, [debauncedSearch]);
+
+  useEffect(() => {
+    if (searchStringTrack !== debauncedSearch) {
+      console.log("fetching initially", pageNumber);
+      setSearchStringTrack(debauncedSearch);
+      getProducts(debauncedSearch, 0).then((data) => {
+        if (data === null) {
+          return setNodata(true);
+        } else {
+          setNodata(false);
+          return SetAllProductList(() => [...data]);
+        }
+      });
+      setPageNumber(0);
+    } else {
+      // if (allProductList.length < 10) return;
+      console.log("fetching again", pageNumber);
+      getProducts(debauncedSearch, pageNumber).then((data) => {
+        if (data === null) {
+          return setNodata(true);
+        } else {
+          setNodata(false);
+          return SetAllProductList((prev: any) => [...prev, ...data]);
+        }
+      });
+    }
+
+    return () => SetProductDataList([]);
+  }, [pageNumber]);
 
   const selectList = (list: boolean[], product: any) => {
     if (list.every((element) => element === false)) {
@@ -58,19 +97,26 @@ const ProductList: FunctionComponent<ProductListProps> = ({
     }
   };
 
-  const lastProductElementRef = useCallback((node: any) => {
-    if (observer.current) observer.current.disconnect();
-    observer.current = new IntersectionObserver((entries) => {
-      if (entries[0].isIntersecting) {
-        console.log("intersecting");
-        setPageNumber((prevPageNumber) => prevPageNumber + 1);
-      }
-    });
-    if (node) observer.current.observe(node);
-  }, []);
+  const scrollMore = (e: any) => {
+    if (
+      e.target.clientHeight + e.target.scrollTop + 1 >=
+      e.target.scrollHeight
+    ) {
+      if (e.target.scrollTop === 0) return;
+      console.log("cscdsjjdsdcjs");
+      setPageNumber((prevPageNumber) => prevPageNumber + 1);
+    }
+  };
 
   return (
-    <div>
+    <div
+      style={{
+        position: "relative",
+        height: "100%",
+        overflowY: "scroll",
+      }}
+      onScroll={(e: any) => scrollMore(e)}
+    >
       <div className="search-container">
         <SearchComponent onChange={setSearchString} />
       </div>
@@ -81,22 +127,28 @@ const ProductList: FunctionComponent<ProductListProps> = ({
           </div>
         ) : (
           <div>
-            {allProductList.map((product: any, id: any) =>
-              allProductList.length === id + 1 ? (
-                <div ref={lastProductElementRef} key={id}>
-                  <ProductSelector
-                    selectList={selectList}
-                    product={product}
-                    key={id}
-                  />
-                </div>
-              ) : (
-                <ProductSelector
-                  selectList={selectList}
-                  product={product}
-                  key={id}
-                />
-              )
+            {noData && allProductList.length === 0 ? (
+              <div>No Data</div>
+            ) : (
+              <div>
+                {allProductList.map((product: any, id: any) =>
+                  allProductList.length === id + 1 ? (
+                    <div key={id}>
+                      <ProductSelector
+                        selectList={selectList}
+                        product={product}
+                        key={id}
+                      />
+                    </div>
+                  ) : (
+                    <ProductSelector
+                      selectList={selectList}
+                      product={product}
+                      key={id}
+                    />
+                  )
+                )}
+              </div>
             )}
           </div>
         )}
