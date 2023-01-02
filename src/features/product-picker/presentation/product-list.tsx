@@ -33,7 +33,8 @@ const ProductList: FunctionComponent<ProductListProps> = ({
 
   useEffect(() => {
     if (searchStringTrack !== debauncedSearch) {
-      console.log("fetching initially", pageNumber);
+      SetProductDataList([]);
+      SetAllProductList([]);
       setSearchStringTrack(debauncedSearch);
       getProducts(debauncedSearch, 0).then((data) => {
         if (data === null) {
@@ -45,8 +46,6 @@ const ProductList: FunctionComponent<ProductListProps> = ({
       });
       setPageNumber(0);
     } else {
-      // if (allProductList.length < 10) return;
-      console.log("fetching again", pageNumber);
       getProducts(debauncedSearch, pageNumber).then((data) => {
         if (data === null) {
           return setNodata(true);
@@ -74,7 +73,6 @@ const ProductList: FunctionComponent<ProductListProps> = ({
       });
       setPageNumber(0);
     } else {
-      // if (allProductList.length < 10) return;
       console.log("fetching again", pageNumber);
       getProducts(debauncedSearch, pageNumber).then((data) => {
         if (data === null) {

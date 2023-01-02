@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import ButtonComponent from "../../../components/button-component";
 import DialogComponent from "../../../components/dialog-component";
 import { transformToProductInterface } from "../../../models/product/product-model";
@@ -10,9 +10,7 @@ import "./product-display.scss";
 const ProductDisplay = () => {
   const [productDialogOpen, SetProductDialogOpen] = useState<Boolean>(false);
   const [productDataList, SetProductDataList] = useState<any>([]);
-  const [productIndexToUpdate, SetProductIndexToUpdate] = useState<
-    number
-  >(0);
+  const [productIndexToUpdate, SetProductIndexToUpdate] = useState<number>(0);
 
   const { addProductData, addEmptyProductData } = useProductData();
 
@@ -49,6 +47,10 @@ const ProductDisplay = () => {
     SetProductDialogOpen(true);
   };
 
+  useEffect(() => {
+    console.log(productDataList);
+  }, [productDataList]);
+
   return (
     <div className="product-display-container">
       <h3>Add Products</h3>
@@ -63,7 +65,8 @@ const ProductDisplay = () => {
         >
           Add Product
         </ButtonComponent>
-        <br /><br />
+        <br />
+        <br />
       </div>
       {productDialogOpen && (
         <DialogComponent
